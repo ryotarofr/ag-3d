@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use crate::game::components::{Physics, Size};
+use crate::rendering::shapes::SphereSprite;
 
 #[derive(Component)]
 pub struct Enemy {
@@ -26,18 +27,25 @@ impl Plugin for EnemyPlugin {
 
 fn spawn_enemies(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    for i in 0..5 {
-        let angle = i as f32 * std::f32::consts::TAU / 5.0;
-        let x = angle.cos() * 8.0;
-        let z = angle.sin() * 8.0;
+    use rand::Rng;
+    let mut rng = rand::thread_rng();
+    
+    for _ in 0..5 {
+        // Generate random 3D positions
+        let x = rng.gen_range(-100.0..100.0);
+        let y = rng.gen_range(-100.0..100.0);
+        let z = rng.gen_range(-50.0..50.0);
+        
+        // Add color variation to enemies
+        let red_intensity = rng.gen_range(0.8..1.0);
+        let green_tint = rng.gen_range(0.0..0.3);
+        let blue_tint = rng.gen_range(0.0..0.2);
+        let color = Color::srgb(red_intensity, green_tint, blue_tint);
         
         commands.spawn((
-            Mesh3d(meshes.add(Sphere::new(0.8))),
-            MeshMaterial3d(materials.add(Color::srgb(1.0, 0.0, 0.0))),
-            Transform::from_xyz(x, 0.0, z),
+            SphereSprite::new(15.0, color),
+            Transform::from_xyz(x, y, z),
             Enemy::default(),
             Physics::default(),
             Size::new(0.8, 8.0),

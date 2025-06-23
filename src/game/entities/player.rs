@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use crate::game::components::{Physics, Size};
+use crate::rendering::shapes::SphereSprite;
 
 #[derive(Component)]
 pub struct Player {
@@ -28,12 +29,9 @@ impl Plugin for PlayerPlugin {
 
 fn spawn_player(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     commands.spawn((
-        Mesh3d(meshes.add(Sphere::new(1.0))),
-        MeshMaterial3d(materials.add(Color::srgb(0.0, 0.0, 1.0))),
+        SphereSprite::new(25.0, Color::srgb(0.0, 0.0, 1.0)),
         Transform::from_xyz(0.0, 0.0, 0.0),
         Player::default(),
         Physics::default(),
