@@ -17,19 +17,16 @@ pub struct SphereSpritePlugin;
 impl Plugin for SphereSpritePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup_sphere_resources)
-           .add_systems(PostUpdate, update_sphere_sprites);
+            .add_systems(PostUpdate, update_sphere_sprites);
     }
 }
 
-fn setup_sphere_resources(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-) {
+fn setup_sphere_resources(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>) {
     // Create a sphere mesh resource
     let sphere_mesh = Sphere::new(1.0).mesh().uv(32, 18);
     let sphere_mesh_handle = meshes.add(sphere_mesh);
-    commands.insert_resource(SphereMeshResource { 
-        mesh: sphere_mesh_handle 
+    commands.insert_resource(SphereMeshResource {
+        mesh: sphere_mesh_handle,
     });
 }
 
@@ -52,7 +49,7 @@ fn update_sphere_sprites(
             perceptual_roughness: 0.8,
             ..default()
         });
-        
+
         if let Ok(mut entity_commands) = commands.get_entity(entity) {
             entity_commands.insert((
                 Mesh3d(sphere_mesh.mesh.clone()),
